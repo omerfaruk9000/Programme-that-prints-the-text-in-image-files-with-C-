@@ -1,0 +1,283 @@
+using System;
+using System.Windows;
+using System.Windows.Forms;
+using System.Drawing;
+using Tesseract;
+using Tesseract.Interop;
+using Microsoft.VisualBasic.ApplicationServices;
+using HtmlAgilityPack;
+using Emgu.CV;
+using Emgu.CV.Structure;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Util;
+using Emgu.CV.OCR;
+
+namespace PictureFiletoText
+{
+    public partial class Form1 : Form
+    {
+        private string selectedjpgdoc;
+        private string selectedpngdoc;
+        private string selectedjpegdoc;
+        public Form1()
+        {
+            InitializeComponent();
+            comboBox1.Items.Add("Turkish");
+            comboBox1.Items.Add("English");
+            comboBox1.Items.Add("German");
+            comboBox1.Items.Add("Spanish");
+            comboBox1.Items.Add("French");
+            comboBox1.Items.Add("Italian");
+        }
+
+        private void btnfilechoose_Click(object sender, EventArgs e)
+        {
+
+            if (rdbuttonjpg.Checked)
+            {
+                OpenFileDialog jpg = new OpenFileDialog();//we defined a new openfiledialog and defined the name jpg
+                jpg.Filter = "JPG Documents|*.jpg";//we filter it for jpg documents
+                jpg.Title = "Choose Your JPG Document";
+                if (jpg.ShowDialog() == DialogResult.OK)
+                {
+                    selectedjpgdoc = jpg.FileName;
+                    label3.Text = "Selected file: " + jpg.FileName;
+                }
+                else
+                {
+                    MessageBox.Show("Error! Please control the file type and the download period");
+                }
+            }//we wrote the condition for jpg documents
+
+            if (rdbuttonjpeg.Checked)
+            {
+                OpenFileDialog jpeg = new OpenFileDialog();//we defined a new openfiledialog and gave the name jpeg
+                jpeg.Filter = "JPEG Documents|*.jpeg";//we filter it for jpeg documents
+                jpeg.Title = "Choose your JPEG Document";
+                if (jpeg.ShowDialog() == DialogResult.OK)
+                {
+                    selectedjpegdoc = jpeg.FileName;
+                    label3.Text = "Selected file: " + jpeg.FileName;
+                }
+                else
+                {
+                    MessageBox.Show("Error! Please control the file type and the download period");
+                }
+            }//we wrote the condition for jpeg documents
+
+            if (rdbuttonpng.Checked)
+            {
+                OpenFileDialog png = new OpenFileDialog();//we defined a new openfiledialog and gave the name png 
+                png.Filter = "PNG Documents|*.png";
+                png.Title = "Choose your PNG Document";
+                if (png.ShowDialog() == DialogResult.OK)
+                {
+                    selectedpngdoc = png.FileName;
+                    label3.Text = "Selected file: " + png.FileName;
+                }
+                else
+                {
+                    MessageBox.Show("Error! Please control the file type and the download period");
+                }
+            }//we wrote the condition for png documents
+        }
+
+        private void btntext_Click(object sender, EventArgs e)
+        {
+            string selectedDoc = "";
+
+            if (rdbuttonjpg.Checked == true)
+            {
+                selectedDoc = selectedjpgdoc;
+            }
+            else if (rdbuttonjpeg.Checked == true)
+            {
+                selectedDoc = selectedjpegdoc;
+            }
+            else if (rdbuttonpng.Checked == true)
+            {
+                selectedDoc = selectedpngdoc;
+            }
+
+            if (comboBox1.SelectedItem.ToString() == "Turkish")
+            {
+                using (var engine = new TesseractEngine(@"C:\Users\asus\source\repos\PictureFiletoText\PictureFiletoText\tessdata_best-main\", "tur", EngineMode.Default))
+                {
+                    using (var img = Tesseract.Pix.LoadFromFile(selectedDoc))
+                    {
+                        using (var page = engine.Process(img))
+                        {
+                            string extractedText = page.GetText();
+                            if (extractedText != null)
+                            {
+                                richTextBox1.Text = extractedText;
+                            }
+                            else
+                            {
+                                MessageBox.Show("The language can not be detected!");
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (comboBox1.SelectedItem.ToString() == "English")
+            {
+                using (var engine = new TesseractEngine(@"C:\Users\asus\source\repos\PictureFiletoText\PictureFiletoText\tessdata_best-main\", "eng", EngineMode.Default))
+                {
+                    using (var img = Tesseract.Pix.LoadFromFile(selectedDoc))
+                    {
+                        using (var page = engine.Process(img))
+                        {
+                            string extractedText = page.GetText();
+                            if (extractedText != null)
+                            {
+                                richTextBox1.Text = extractedText;
+                            }
+                            else
+                            {
+                                MessageBox.Show("The language can not be detected!");
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (comboBox1.SelectedItem.ToString() == "German")
+            {
+                using (var engine = new TesseractEngine(@"C:\Users\asus\source\repos\PictureFiletoText\PictureFiletoText\tessdata_best-main\", "deu", EngineMode.Default))
+                {
+                    using (var img = Tesseract.Pix.LoadFromFile(selectedDoc))
+                    {
+                        using (var page = engine.Process(img))
+                        {
+                            string extractedText = page.GetText();
+                            if (extractedText != null)
+                            {
+                                richTextBox1.Text = extractedText;
+                            }
+                            else
+                            {
+                                MessageBox.Show("The language can not be detected!");
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (comboBox1.SelectedItem.ToString() == "Spanish")
+            {
+                using (var engine = new TesseractEngine(@"C:\Users\asus\source\repos\PictureFiletoText\PictureFiletoText\tessdata_best-main\", "spa", EngineMode.Default))
+                {
+                    using (var img = Tesseract.Pix.LoadFromFile(selectedDoc))
+                    {
+                        using (var page = engine.Process(img))
+                        {
+                            string extractedText = page.GetText();
+                            if (extractedText != null)
+                            {
+                                richTextBox1.Text = extractedText;
+                            }
+                            else
+                            {
+                                MessageBox.Show("The language can not be detected!");
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (comboBox1.SelectedItem.ToString() == "French")
+            {
+                using (var engine = new TesseractEngine(@"C:\Users\asus\source\repos\PictureFiletoText\PictureFiletoText\tessdata_best-main\", "fra", EngineMode.Default))
+                {
+                    using (var img = Tesseract.Pix.LoadFromFile(selectedDoc))
+                    {
+                        using (var page = engine.Process(img))
+                        {
+                            string extractedText = page.GetText();
+                            if (extractedText != null)
+                            {
+                                richTextBox1.Text = extractedText;
+                            }
+                            else
+                            {
+                                MessageBox.Show("The language can not be detected!");
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (comboBox1.SelectedItem.ToString() == "Italian")
+            {
+                using (var engine = new TesseractEngine(@"C:\Users\asus\source\repos\PictureFiletoText\PictureFiletoText\tessdata_best-main\", "ita", EngineMode.Default))
+                {
+                    using (var img = Tesseract.Pix.LoadFromFile(selectedDoc))
+                    {
+                        using (var page = engine.Process(img))
+                        {
+                            string extractedText = page.GetText();
+                            if (extractedText != null)
+                            {
+                                richTextBox1.Text = extractedText;
+                            }
+                            else
+                            {
+                                MessageBox.Show("The language can not be detected!");
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (comboBox1.SelectedItem.ToString() == null)
+            {
+                MessageBox.Show("You had not selected a file language. Please select a file language!");
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (rdbuttonturkish.Checked)
+            {
+                label1.Text = "Resim Dosyası Metin Çıkarma Programı";
+                label2.Text = "Dosya türünü seçin";
+                label4.Text = "Dosya dilini seçin";
+                btnfilechoose.Text = "Dosya seçin";
+                btntext.Text = "Metni yazdır";
+                button1.Text = "Dili değiştir"; 
+                rdbuttonturkish.Text = "Türkçe";
+                rdbuttonenglish.Text = "İngilizce";
+                rdbuttongerman.Text = "Almanca";
+            }
+
+            if (rdbuttonenglish.Checked)
+            {
+                label1.Text = "Picture File to Text Programm";
+                label2.Text = "Choose The File Type";
+                label4.Text = "Choose The File Language";
+                btnfilechoose.Text = "Choose file";
+                btntext.Text = "Write The Text";
+                button1.Text = "Change The Language";
+                rdbuttonturkish.Text = "Turkish";
+                rdbuttonenglish.Text = "English";
+                rdbuttongerman.Text = "German"; 
+            }
+
+            if (rdbuttongerman.Checked)
+            {
+                label1.Text = "Bilddatei-zu-Text-Programm";
+                label2.Text = "Wählen Sie den Dokument Typ";
+                label4.Text = "Wählen sie die Dokumentsprache";
+                btnfilechoose.Text = "Wählen sie die Dokument";
+                btntext.Text = "Schreib der Text"; 
+                button1.Text = "Sprache ändern";
+                rdbuttonturkish.Text = "Türkisch";
+                rdbuttonenglish.Text = "Englisch";
+                rdbuttongerman.Text = "Deutsch";
+            }
+        }
+    }
+}
+
